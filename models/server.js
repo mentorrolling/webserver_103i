@@ -1,14 +1,20 @@
 // const express = require("express");
 import express from "express";
 import router from "../routes/usuarios.js";
+import { dbConnection } from "../database/config.js";
 
 class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT;
     this.usuarioPath = "/api/usuarios";
+    this.conectarDB();
     this.middlewares();
     this.routes();
+  }
+
+  async conectarDB() {
+    await dbConnection();
   }
 
   routes() {
