@@ -1,6 +1,9 @@
 // const express = require("express");
 import express from "express";
+
 import router from "../routes/usuarios.js";
+import routerAuth from "../routes/auth.js";
+
 import { dbConnection } from "../database/config.js";
 
 class Server {
@@ -8,6 +11,8 @@ class Server {
     this.app = express();
     this.port = process.env.PORT;
     this.usuarioPath = "/api/usuarios";
+    this.authPath = "/api/auth";
+
     this.conectarDB();
     this.middlewares();
     this.routes();
@@ -19,23 +24,7 @@ class Server {
 
   routes() {
     this.app.use(this.usuarioPath, router);
-    // this.app.get("/api", (req, res) => {
-    //   res.json({
-    //     message: "Peticion GET",
-    //   });
-    // });
-
-    // this.app.post("/api", (req, res) => {
-    //   res.send("Petición POST");
-    // });
-
-    // this.app.put("/api/:id", (req, res) => {
-    //   res.send("Petición PUT");
-    // });
-
-    // this.app.delete("/api/:id", (req, res) => {
-    //   res.send("Petición DELETE");
-    // });
+    this.app.use(this.authPath, routerAuth);
   }
 
   middlewares() {

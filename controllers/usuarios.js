@@ -3,9 +3,17 @@ import Usuario from "../models/usuario.js";
 import bcrypt from "bcryptjs";
 // import { validationResult } from "express-validator";
 
-const getUsers = (req, res) => {
+const getUsers = async (req, res) => {
+  const { limite = 5, desde = 0 } = req.query;
+
+  const usuarios = await Usuario.find({ estado: true })
+    .limit(limite)
+    .skip(desde);
+
+  const total = await Usuario.countDocuments({ estado: true });
   res.json({
-    message: "Peticion GET desde controllers",
+    total,
+    usuarios,
   });
 };
 
@@ -69,7 +77,7 @@ const putUser = async (req, res) => {
   const salt = bcrypt.genSaltSync();
   resto.password = bcrypt.hashSync(password, salt);
 
-  const usuario = await Usuario.findByIdAndUpdate(id, resto);
+  const usuario = await Usuario.findByIdAndUpdate(id, resto, { new: true });
 
   res.status(200).json({
     message: "Usuario actualizado",
@@ -77,9 +85,22 @@ const putUser = async (req, res) => {
   });
 };
 
-const deleteUser = (req, res) => {
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  //Borrado físico
+  // const usuarioBorrado = await Usuario.findByIdAndDelete(id);
+
+  //Inactivar al usuario
+  const usuarioBorrado = await Usuario.findByIdAndUpdate(
+    id,
+    { estado: false },
+    { new: true }
+  );
+
   res.json({
-    message: "Peticion DELETE desde controllers",
+    message: "Usuario eliminado",
+    usuarioBorrado,
   });
 };
 export { getUsers, postUser, putUser, deleteUser };

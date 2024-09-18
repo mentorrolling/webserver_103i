@@ -17,4 +17,16 @@ const emailExiste = async (email) => {
   }
 };
 
-export { rolValido, emailExiste };
+const existeUsuarioPorId = async (id) => {
+  const existeUsuario = await Usuario.findById(id);
+  if (!existeUsuario) {
+    throw new Error(`El id ${id} no existe`);
+  }
+
+  //Si el usuario existe verifico su estado
+  if (!existeUsuario.estado) {
+    throw new Error(`El usuario ${existeUsuario.nombre} ya está inactivo`);
+  }
+};
+
+export { rolValido, emailExiste, existeUsuarioPorId };
