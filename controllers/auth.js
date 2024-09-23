@@ -1,5 +1,6 @@
 import Usuario from "../models/usuario.js";
 import bcrypt from "bcryptjs";
+import { generarJWT } from "../helpers/genera-jwt.js";
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -28,10 +29,11 @@ const login = async (req, res) => {
     }
 
     // genero el token
+    const token = await generarJWT(usuario.id);
 
     res.status(202).json({
       msg: "Login ok",
-      // token
+      token,
     });
   } catch (error) {
     res.status(500).json({

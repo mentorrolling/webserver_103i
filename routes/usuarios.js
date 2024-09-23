@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import { validarCampos } from "../middlewares/validar-campos.js";
+import { validarJWT } from "../middlewares/validar-jwt.js";
+import { esAdminRole } from "../middlewares/validar-roles.js";
 import {
   emailExiste,
   existeUsuarioPorId,
@@ -16,7 +18,7 @@ import {
 
 const router = Router();
 
-router.get("/", getUsers);
+router.get("/", [validarJWT, esAdminRole], getUsers);
 
 router.post(
   "/",
@@ -38,6 +40,7 @@ router.post(
 router.put(
   "/:id",
   [
+    validarJWT,
     check("id", "No es un id válido").isMongoId(),
     check("id").custom(existeUsuarioPorId),
     check("rol").custom(rolValido),
@@ -49,6 +52,8 @@ router.put(
 router.delete(
   "/:id",
   [
+    validarJWT,
+    esAdminRole,
     check("id", "No es un id válido").isMongoId(),
     check("id").custom(existeUsuarioPorId),
     validarCampos,
