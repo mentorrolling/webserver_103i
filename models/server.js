@@ -4,6 +4,7 @@ import express from "express";
 import router from "../routes/usuarios.js";
 import routerAuth from "../routes/auth.js";
 import routerCat from "../routes/categorias.js";
+import routerProd from "../routes/productos.js";
 
 import { dbConnection } from "../database/config.js";
 
@@ -14,6 +15,7 @@ class Server {
     this.usuarioPath = "/api/usuarios";
     this.authPath = "/api/auth";
     this.categoriaPath = "/api/categorias";
+    this.productoPath = "/api/productos";
 
     this.conectarDB();
     this.middlewares();
@@ -28,6 +30,7 @@ class Server {
     this.app.use(this.usuarioPath, router);
     this.app.use(this.authPath, routerAuth);
     this.app.use(this.categoriaPath, routerCat);
+    this.app.use(this.productoPath, routerProd);
   }
 
   middlewares() {
