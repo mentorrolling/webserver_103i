@@ -98,7 +98,10 @@ const actualizarProducto = async (req, res) => {
     .populate("categoria", "nombre")
     .populate("usuario", "email");
 
-  res.status(200).json(producto);
+  res.status(200).json({
+    producto,
+    msg: "Producto actualizado!",
+  });
 };
 
 //Borrar producto-----------------------------------------------------
@@ -111,10 +114,25 @@ const borrarProducto = async (req, res) => {
     { new: true }
   );
 
-  res.json({
-    productoBorrado,
+  const { nombre } = productoBorrado;
+
+  res.status(200).json({
+    msg: "El producto fue borrado",
+    nombre,
   });
 };
+
+// const borrarProductos = async (req, res) => {
+
+//   const query={estado:false}
+
+//   await Producto.findAndRemove(query)
+
+//    res.status(200).json({
+//     msg: "Se borraron todos los productos inactivos",
+
+//   });
+// };
 
 export {
   productoPost,
