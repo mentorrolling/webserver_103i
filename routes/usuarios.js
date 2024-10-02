@@ -11,6 +11,7 @@ import {
 
 import {
   getUsers,
+  getUser,
   postUser,
   putUser,
   deleteUser,
@@ -19,6 +20,16 @@ import {
 const router = Router();
 
 router.get("/", [validarJWT, esAdminRole], getUsers);
+router.get(
+  "/:id",
+  [
+    validarJWT,
+    check("id", "No es un id válido").isMongoId(),
+    check("id").custom(existeUsuarioPorId),
+    validarCampos,
+  ],
+  getUser
+);
 
 router.post(
   "/",

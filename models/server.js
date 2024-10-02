@@ -1,6 +1,9 @@
 // const express = require("express");
 import express from "express";
 
+//Importo los cors
+import cors from "cors";
+
 import router from "../routes/usuarios.js";
 import routerAuth from "../routes/auth.js";
 import routerCat from "../routes/categorias.js";
@@ -37,6 +40,9 @@ class Server {
   }
 
   middlewares() {
+    //Middleware para Cors
+    this.app.use(cors());
+
     this.app.use(express.json());
     this.app.use(express.static("public"));
   }

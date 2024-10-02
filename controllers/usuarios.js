@@ -17,29 +17,22 @@ const getUsers = async (req, res) => {
   });
 };
 
+const getUser = async (req, res) => {
+  const { id } = req.params;
+
+  const usuario = await Usuario.findById(id);
+
+  res.json({
+    usuario,
+  });
+};
+
 const postUser = async (req = request, res = response) => {
   const datos = req.body;
 
   const { nombre, email, password, rol } = datos;
 
-  //Validar errores
-  // const errors = validationResult(req);
-  // console.log(errors);
-  // if (!errors.isEmpty()) {
-  //   return res.status(400).json(errors);
-  // }
-  //-----------------------------------------
-
   const usuario = new Usuario({ nombre, email, password, rol });
-
-  //verificar el email-------------------------------
-  // const existeEmail = await Usuario.findOne({ email });
-
-  // if (existeEmail) {
-  //   return res.status(400).json({
-  //     msg: "El correo ya existe",
-  //   });
-  // } //---------------------------------------------
 
   //Encritar contraseña
   const salt = bcrypt.genSaltSync();
@@ -52,20 +45,6 @@ const postUser = async (req = request, res = response) => {
     msg: "Usuario creado con éxito!",
     usuario,
   });
-
-  // const { nombre, rol } = req.body;
-
-  // if (nombre) {
-  //   res.json({
-  //     message: "Peticion POST desde controllers",
-  //     nombre,
-  //     rol,
-  //   });
-  // } else {
-  //   res.status(400).json({
-  //     message: "Falta el nombre",
-  //   });
-  // }
 };
 
 const putUser = async (req, res) => {
@@ -103,4 +82,4 @@ const deleteUser = async (req, res) => {
     usuarioBorrado,
   });
 };
-export { getUsers, postUser, putUser, deleteUser };
+export { getUsers, postUser, putUser, deleteUser, getUser };
